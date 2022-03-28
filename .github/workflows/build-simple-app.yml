@@ -1,0 +1,88 @@
+name: build-simple-app
+on:
+  push:
+    tags:
+      - '*'
+jobs:
+  build:
+    name: Build bundle
+    runs-on: ubuntu-latest
+    steps:
+      - name: Prepare carvel
+        uses: vmware-tanzu/carvel-setup-action@v1
+        with:
+          only: imgpkg, kbld, ytt
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          ref: main
+      - name: Export version
+        run: |
+          echo "NEW_VERSION=${{ github.ref_name }}" >> $GITHUB_ENV
+      - name: Export bundle name
+        run: |
+          echo "BUNDLE=ghcr.io/${{ github.repository_owner }}/carvel-repository-example-simple-app:${{ env.NEW_VERSION }}" >> $GITHUB_ENV
+      - name: Log in to registry
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+      - name: Push bundle
+        run: |
+          imgpkg push -b ${{ env.BUNDLE }} -f simple-app/bundle/
+      - name: Generate schema
+        run: |
+          ytt -f simple-app/bundle/config/values.yml --data-values-schema-inspect -o openapi-v3 > schema-openapi.yml
+      - name: Generate package version
+        run: |
+          ytt -f simple-app/package-template.yml \
+              --data-value-file openapi=schema-openapi.yml \
+              -v version="${{ env.NEW_VERSION }}" \
+              -v bundle="${{ env.BUNDLE }}" \
+              > repository/packages/simple-app.corp.com/${{ env.NEW_VERSION }}.yml
+      - name: Record which package bundles are used
+        run: |
+          mkdir -p repository/.imgpkg
+          kbld -f repository/packages/ --imgpkg-lock-output repository/.imgpkg/images.yml
+      - name: Commit package version
+        uses: EndBug/add-and-commit@v9
+        with:
+          message: 'simple-app ${{ env.NEW_VERSION }} - ${{ github.event.head_commit.message }}'
+          add: 'repository/'
+      - name: Export repository name
+        run: |
+          echo "REPOSITORY=ghcr.io/${{ github.repository_owner }}/carvel-repository-example-repository:${{ env.NEW_VERSION }}" >> $GITHUB_ENV
+      - name: Push bundle
+        run: |
+          imgpkg push -b ${{ env.REPOSITORY }} -f repository/
+      - name: Create PackageRepository CR
+        run: |
+          cat > package_repository_cr.yml << EOF
+          ---
+          apiVersion: packaging.carvel.dev/v1alpha1
+          kind: PackageRepository
+          metadata:
+            name: simple-package-repository
+          spec:
+            fetch:
+              imgpkgBundle:
+                image: ${{ env.REPOSITORY }}
+          EOF
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ env.NEW_VERSION }}
+          release_name: Release ${{ env.NEW_VERSION }}
+          draft: false
+          prerelease: false
+      - name: Upload Release Asset
+        id: upload-release-asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./package_repository_cr.yml
+          asset_name: package_repository_cr.yml
+          asset_content_type: text/yaml
+
