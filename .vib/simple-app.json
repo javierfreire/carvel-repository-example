@@ -1,0 +1,49 @@
+{
+  "phases": {
+    "package": {
+      "actions": [
+        {
+          "action_id": "carvel-package",
+          "params": {
+            "resources": {
+              "url": "{SHA_ARCHIVE}",
+              "path": "/simple-app/"
+            }
+          }
+        }
+      ]
+    },
+    "verify": {
+      "context" : {
+        "target_platform": {
+          "target_platform_id": "91d398a2-25c4-4cda-8732-75a3cfc179a1"
+        }
+      },
+      "actions": [
+        {
+          "action_id": "resilience-tests",
+          "params": {
+            "test_cases": [
+              "testPodScaleUp",
+              "testPodScaleDown"
+            ]
+          }
+        }
+      ]
+    },
+    "publish": {
+      "actions": [
+        {
+          "action_id": "carvel-publish",
+          "params": {
+            "oci_registry": {
+              "name": "ghcr.io/javierfreire",
+              "username": "{REGISTRY_USERNAME}",
+              "password": "{REGISTRY_PASSWORD}"
+            }
+          }
+        }
+      ]
+    }
+  }
+}
