@@ -1,0 +1,10 @@
+#@ load("@ytt:data", "data")  # for reading data values (generated via ytt's data-values-schema-inspect mode).
+---
+apiVersion: packaging.carvel.dev/v1alpha1
+kind: PackageRepository
+metadata:
+  name: corp-repository
+spec:
+  fetch:
+    imgpkgBundle:
+      image: #@ data.values.bundle
