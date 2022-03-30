@@ -1,0 +1,41 @@
+apiVersion: data.packaging.carvel.dev/v1alpha1
+kind: Package
+metadata:
+  name: simple-app.corp.com.1.0.1
+spec:
+  refName: simple-app.corp.com
+  version: 1.0.1
+  releaseNotes: |
+    TODO: Use a gh-action to compose a changelog
+  valuesSchema:
+    openAPIv3:
+      type: object
+      additionalProperties: false
+      properties:
+        svc_port:
+          type: integer
+          description: Port number for the service.
+          default: 80
+        app_port:
+          type: integer
+          description: Target port for the application.
+          default: 80
+        hello_msg:
+          type: string
+          description: Name used in hello message from app when app is pinged.
+          default: hello
+  template:
+    spec:
+      fetch:
+      - imgpkgBundle:
+          image: ghcr.io/javierfreire/carvel-repository-example-simple-app:1.0.1
+      template:
+      - ytt:
+          paths:
+          - config/
+      - kbld:
+          paths:
+          - .imgpkg/images.yml
+          - '-'
+      deploy:
+      - kapp: {}

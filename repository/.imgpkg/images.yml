@@ -8,4 +8,11 @@ images:
           tag: 1.0.0
           url: ghcr.io/javierfreire/carvel-repository-example-simple-app:1.0.0
   image: ghcr.io/javierfreire/carvel-repository-example-simple-app@sha256:61cb2e3a8522bfd9d4b6219cb9e382df151ba6d4fcc4c96f870ee4e1cffbbf9c
+- annotations:
+    kbld.carvel.dev/id: ghcr.io/javierfreire/carvel-repository-example-simple-app:1.0.1
+    kbld.carvel.dev/origins: |
+      - resolved:
+          tag: 1.0.1
+          url: ghcr.io/javierfreire/carvel-repository-example-simple-app:1.0.1
+  image: ghcr.io/javierfreire/carvel-repository-example-simple-app@sha256:f8be0cbf538179afa5a2d4cd6e965d636871a959cc3a2002ae2a30fd67bb6fb2
 kind: ImagesLock
