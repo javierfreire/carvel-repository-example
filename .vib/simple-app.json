@@ -1,0 +1,40 @@
+{
+  "phases": {
+    "package": {
+      "actions": [
+        {
+          "action_id": "carvel-package",
+          "params": {
+            "resources": {
+              "url": "{SHA_ARCHIVE}",
+              "path": "/simple-app/"
+            }
+          }
+        }
+      ]
+    },
+    "verify": {
+      "context": {
+        "runtime_parameters": "bmFtZXNwYWNlOiB7eyBOQU1FU1BBQ0UgfX0KaW5ncmVzczoKICBlbmFibGVkOiBmYWxzZQ==",
+        "target_platform": {
+          "target_platform_id": "7ddab896-2e4e-4d58-a501-f79897eba3a0"
+        }
+      },
+      "actions": [
+        {
+          "action_id": "health-check",
+          "params": {
+            "app_protocol": "HTTP",
+            "endpoint": "lb-simple-app-service"
+          }
+        },
+        {
+          "action_id": "trivy",
+          "params": {
+            "threshold": "IGNORE_ALL"
+          }
+        }
+      ]
+    }
+  }
+}

@@ -1,8 +1,25 @@
 #@data/values-schema
 ---
+#@schema/desc "The namespace in which to deploy grafana."
+namespace: simpleapp
 #@schema/desc "Port number for the service."
 svc_port: 80
 #@schema/desc "Target port for the application."
 app_port: 80
 #@schema/desc "Name used in hello message from app when app is pinged."
 hello_msg: hello
+
+ingress:
+  enabled: false
+  virtual_host_fqdn: "grafana.system.tanzu"
+  prefix: "/"
+  servicePort: 80
+  #! [Optional] The certificate for the ingress if you want to use your own TLS certificate.
+  #! We will issue the certificate by cert-manager when it's empty.
+  tlsCertificate:
+    #! [Required] the certificate
+    tls.crt: xxxx
+    #! [Required] the private key
+    tls.key: xxxx
+    #! [Optional] the CA certificate
+    ca.crt: xxxx
