@@ -12,6 +12,8 @@ As container registry we are using GitHub Container Registry. For workflows to b
 that [workflows have access](https://docs.github.com/en/packages/learn-github-packages/configuring-a-packages-access-control-and-visibility#ensuring-workflow-access-to-your-package).
 Keep in mind that to give access it is necessary to create the package by hand first.
 
+![Explanation](assets/carvel-packages.jpg)
+
 ## package: simple-app
 
 In this example, we only manage one package, but a single repo can handle multiple packages.
