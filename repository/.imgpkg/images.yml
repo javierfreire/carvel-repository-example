@@ -8,4 +8,11 @@ images:
           tag: 1.0.0
           url: ghcr.io/javierfreire/simple-app.corp.org:1.0.0
   image: ghcr.io/javierfreire/simple-app.corp.org@sha256:f852c987fb4b74855484c9b7273dbf55ff42f473212742aa6e55e2ce99892956
+- annotations:
+    kbld.carvel.dev/id: ghcr.io/javierfreire/simple-app.corp.org:1.0.1
+    kbld.carvel.dev/origins: |
+      - resolved:
+          tag: 1.0.1
+          url: ghcr.io/javierfreire/simple-app.corp.org:1.0.1
+  image: ghcr.io/javierfreire/simple-app.corp.org@sha256:8bd267dcf680ccaaf0a0ec8335ba344e5f3bbd8e337c4830f536784d0376e1ef
 kind: ImagesLock
