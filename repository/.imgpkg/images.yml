@@ -1,0 +1,11 @@
+---
+apiVersion: imgpkg.carvel.dev/v1alpha1
+images:
+- annotations:
+    kbld.carvel.dev/id: ghcr.io/javierfreire/simple-app.corp.org:1.0.0
+    kbld.carvel.dev/origins: |
+      - resolved:
+          tag: 1.0.0
+          url: ghcr.io/javierfreire/simple-app.corp.org:1.0.0
+  image: ghcr.io/javierfreire/simple-app.corp.org@sha256:f852c987fb4b74855484c9b7273dbf55ff42f473212742aa6e55e2ce99892956
+kind: ImagesLock
