@@ -7,4 +7,4 @@ svc_port: 80
 #@schema/desc "Target port for the application."
 app_port: 80
 #@schema/desc "Name used in hello message from app when app is pinged."
-hello_msg: my friend
+hello_msg: human

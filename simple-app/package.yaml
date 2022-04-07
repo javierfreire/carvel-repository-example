@@ -1,10 +1,10 @@
 apiVersion: data.packaging.carvel.dev/v1alpha1
 kind: Package
 metadata:
-  name: simple-app.corp.org.1.0.1
+  name: simple-app.corp.org.1.0.2
 spec:
   refName: simple-app.corp.org
-  version: 1.0.1
+  version: 1.0.2
   releaseNotes: |
     TODO: Use a gh-action to compose a changelog
   valuesSchema:
@@ -26,13 +26,13 @@ spec:
           description: Target port for the application.
         hello_msg:
           type: string
-          default: my friend
+          default: human
           description: Name used in hello message from app when app is pinged.
   template:
     spec:
       fetch:
       - imgpkgBundle:
-          image: ghcr.io/javierfreire/simple-app.corp.org:1.0.1
+          image: ghcr.io/javierfreire/simple-app.corp.org:1.0.2
       template:
       - ytt:
           paths:
